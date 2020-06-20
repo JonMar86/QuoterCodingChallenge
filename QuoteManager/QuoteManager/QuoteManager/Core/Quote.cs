@@ -2,17 +2,24 @@
 {
     using System;
     using Interfaces;
+    using Newtonsoft.Json;
 
+    [JsonObject]
     internal class Quote : IQuote
     {
+        [JsonProperty]
         public Guid Id { get; set; }
 
+        [JsonProperty]
         public string Symbol { get; set; }
 
+        [JsonProperty]
         public double Price { get; set; }
 
+        [JsonProperty]
         public uint AvailableVolume { get; set; }
 
+        [JsonProperty]
         public DateTime ExpirationDate { get; set; }
 
         public Quote()
