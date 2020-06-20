@@ -6,8 +6,6 @@
     public interface IQuoteRepo<T>
         where T : IQuote
     {
-        bool TryGetValue(Guid id, out T quote);
-
         void AddOrUpdate(T quote);
 
         bool Remove(Guid id);

@@ -33,7 +33,7 @@
                     _books[foundQuote.Symbol].Remove(foundQuote);
 
                     if (_books.TryGetValue(quote.Symbol, out var quotes))
-                    {                        
+                    {
                         quotes.Add(foundQuote);
                     }
                     else
@@ -64,10 +64,11 @@
         {
             if (_quotes.TryGetValue(id, out IQuote quote))
             {
-                _books[quote.Symbol].Remove(quote);                
+                _books[quote.Symbol].Remove(quote);
+                return _quotes.Remove(id);
             }
 
-            return _quotes.Remove(id);
+            return false;
         }
 
         public bool Remove(string symbol)
@@ -79,15 +80,10 @@
                     _quotes.Remove(quote.Id);
                 }
 
-                book.Clear();                
+                book.Clear();
             }
 
             return _books.Remove(symbol);
-        }
-
-        public bool TryGetValue(Guid id, out IQuote quote)
-        {
-            return _quotes.TryGetValue(id, out quote);
         }
 
         public IEnumerable<IQuote> this[string symbol]

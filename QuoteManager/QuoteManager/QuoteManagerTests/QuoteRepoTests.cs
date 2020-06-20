@@ -153,5 +153,153 @@
             Assert.AreEqual(updatingQuote.AvailableVolume, existingQuote.AvailableVolume);
             Assert.AreEqual(updatingQuote.ExpirationDate, existingQuote.ExpirationDate);
         }
+
+        [Test]
+        public void Remove_ById_WhenExists_RemovedAndReturnsTrue()
+        {
+            // Arrange
+            const string symbol = "TestSymbol";
+
+            var existingQuote = new Quote(symbol, 3d, 20, DateTime.Now.AddDays(1));
+
+            _quotes.Add(existingQuote.Id, existingQuote);
+            _books.Add(symbol, new SortedQuotes { existingQuote });
+
+            // Act
+            bool result = _quoteRepo.Remove(existingQuote.Id);
+
+            // Assert
+            Assert.IsTrue(result);
+            Assert.AreEqual(0, _quotes.Count);
+            Assert.AreEqual(0, _books[symbol].Count);
+        }
+
+        [Test]
+        public void Remove_ById_WhenDoesNotExist_ReturnsFalse()
+        {
+            // Arrange
+            const string symbol = "TestSymbol";
+
+            var existingQuote = new Quote(symbol, 3d, 20, DateTime.Now.AddDays(1));
+
+            _quotes.Add(existingQuote.Id, existingQuote);
+            _books.Add(symbol, new SortedQuotes { existingQuote });
+
+            // Act
+            bool result = _quoteRepo.Remove(Guid.Empty);
+
+            // Assert
+            Assert.IsFalse(result);
+            Assert.AreEqual(1, _quotes.Count);
+            Assert.AreEqual(1, _books[symbol].Count);
+        }
+        [Test]
+        public void Remove_BySymbol_WhenExists_RemovedAndReturnsTrue()
+        {
+            // Arrange
+            const string symbol = "TestSymbol";
+
+            var existingQuote1 = new Quote(symbol, 3d, 20, DateTime.Now.AddDays(1));
+            var existingQuote2 = new Quote(symbol, 2d, 21, DateTime.Now.AddDays(1));
+
+            _quotes.Add(existingQuote1.Id, existingQuote1);
+            _quotes.Add(existingQuote2.Id, existingQuote2);
+            _books.Add(symbol, new SortedQuotes { existingQuote1, existingQuote2 });
+
+            // Act
+            bool result = _quoteRepo.Remove(symbol);
+
+            // Assert
+            Assert.IsTrue(result);
+            Assert.AreEqual(0, _quotes.Count);
+            Assert.IsFalse(_books.ContainsKey(symbol));
+        }
+
+        [Test]
+        public void Remove_BySymbol_WhenDoesNotExist_ReturnsFalse()
+        {
+            // Arrange
+            const string symbol = "TestSymbol";
+
+            var existingQuote1 = new Quote(symbol, 3d, 20, DateTime.Now.AddDays(1));
+            var existingQuote2 = new Quote(symbol, 2d, 21, DateTime.Now.AddDays(1));
+
+            _quotes.Add(existingQuote1.Id, existingQuote1);
+            _quotes.Add(existingQuote2.Id, existingQuote2);
+            _books.Add(symbol, new SortedQuotes { existingQuote1, existingQuote2 });
+
+            // Act
+            bool result = _quoteRepo.Remove("OtherSymbol");
+
+            // Assert
+            Assert.IsFalse(result);
+            Assert.AreEqual(2, _quotes.Count);
+            Assert.AreEqual(2, _books[symbol].Count);
+        }
+
+        [Test]
+        public void IndexerBySymbol_WhenExists_YieldsQuotes()
+        {
+            // Arrange
+            const string symbol = "TestSymbol";
+
+            var existingQuote1 = new Quote(symbol, 3d, 20, DateTime.Now.AddDays(1));
+            var existingQuote2 = new Quote(symbol, 2d, 21, DateTime.Now.AddDays(1));
+
+            _quotes.Add(existingQuote1.Id, existingQuote1);
+            _quotes.Add(existingQuote2.Id, existingQuote2);
+            _books.Add(symbol, new SortedQuotes { existingQuote1, existingQuote2 });
+
+            // Act
+            var yielded = new List<IQuote>();
+            foreach (var quote in _quoteRepo[symbol])
+            {
+                yielded.Add(quote);
+            }
+
+            Assert.AreEqual(2, yielded.Count);
+            Assert.AreSame(yielded[0], existingQuote2);
+            Assert.AreSame(yielded[1], existingQuote1);
+        }
+
+        [Test]
+        public void IndexerBySymbol_WhenSymbolEmpty_YieldsNothing()
+        {
+            // Arrange
+            const string symbol = "TestSymbol";
+            _books.Add(symbol, new SortedQuotes());
+
+            // Act
+            var yielded = new List<IQuote>();
+            Assert.DoesNotThrow(() =>
+            {
+                foreach (var quote in _quoteRepo[symbol])
+                {
+                    yielded.Add(quote);
+                }
+            });
+
+            // Assert
+            Assert.AreEqual(0, yielded.Count);
+        }
+
+        [Test]
+        public void IndexerBySymbol_WhenSymbolNotPresent_YieldsNothing()
+        {
+            _books.Add("TestSymbol", new SortedQuotes());
+
+            // Act
+            var yielded = new List<IQuote>();
+            Assert.DoesNotThrow(() =>
+            {
+                foreach (var quote in _quoteRepo["OtherSymbol"])
+                {
+                    yielded.Add(quote);
+                }
+            });
+
+            // Assert
+            Assert.AreEqual(0, yielded.Count);
+        }
     }
 }
