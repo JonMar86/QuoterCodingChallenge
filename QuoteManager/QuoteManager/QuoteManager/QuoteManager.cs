@@ -1,4 +1,7 @@
-﻿namespace Quoter
+﻿using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("QuoteManagerTests")]
+namespace Quoter
 {
     using System;
     using System.Collections.Generic;
@@ -64,7 +67,7 @@
 
             foreach (var quote in _quoteRepo[symbol])
             {
-                if (volumeRequested == 0)
+                if (tradeResults.VolumeExecuted == volumeRequested)
                     break;
 
                 if (quote.AvailableVolume == 0 || quote.ExpirationDate < DateTime.Now)

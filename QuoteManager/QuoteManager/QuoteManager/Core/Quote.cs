@@ -14,5 +14,18 @@
         public uint AvailableVolume { get; set; }
 
         public DateTime ExpirationDate { get; set; }
+
+        public Quote()
+        {
+        }
+
+        public Quote(string symbol, double price, uint availableVolume, DateTime expirationDate)
+        {
+            this.Id = Guid.NewGuid();
+            this.Symbol = symbol;
+            this.Price = price;
+            this.AvailableVolume = availableVolume;
+            this.ExpirationDate = expirationDate;
+        }
     }
 }
