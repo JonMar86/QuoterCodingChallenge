@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoteManager", "QuoteManager\QuoteManager.csproj", "{68C0D1D8-4982-4EA2-A818-5BB519028E00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FBEC2FB5-0D57-46A6-A6E3-FE1F02BCE034}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		..\QuoteManager.txt = ..\QuoteManager.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68C0D1D8-4982-4EA2-A818-5BB519028E00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68C0D1D8-4982-4EA2-A818-5BB519028E00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68C0D1D8-4982-4EA2-A818-5BB519028E00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68C0D1D8-4982-4EA2-A818-5BB519028E00}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE4E2FE5-3FDE-465A-97BD-2CF13B131D18}
+	EndGlobalSection
+EndGlobal
