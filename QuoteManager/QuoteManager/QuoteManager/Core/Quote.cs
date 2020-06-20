@@ -20,8 +20,13 @@
         }
 
         public Quote(string symbol, double price, uint availableVolume, DateTime expirationDate)
+            : this(Guid.NewGuid(), symbol, price, availableVolume, expirationDate)
         {
-            this.Id = Guid.NewGuid();
+        }
+
+        public Quote(Guid id, string symbol, double price, uint availableVolume, DateTime expirationDate)
+        {
+            this.Id = id;
             this.Symbol = symbol;
             this.Price = price;
             this.AvailableVolume = availableVolume;

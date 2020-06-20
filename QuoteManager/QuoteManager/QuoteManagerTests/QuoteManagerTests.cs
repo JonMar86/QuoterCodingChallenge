@@ -15,7 +15,7 @@
         private QuoteManager _quoteManager;
 
         [SetUp]
-        public void InitializeMocks()
+        public void InitializeFixture()
         {
             _quoteRepoMock = Substitute.For<IQuoteRepo<IQuote>>();
             _quoteManager = new QuoteManager(_quoteRepoMock);

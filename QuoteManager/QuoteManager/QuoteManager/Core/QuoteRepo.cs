@@ -6,17 +6,15 @@
 
     internal class QuoteRepo : IQuoteRepo<IQuote>
     {
-        private static readonly IComparer<IQuote> _quoteSorter = new QuoteComparer();
-
         private readonly IDictionary<Guid, IQuote> _quotes;
-        private readonly IDictionary<string, SortedSet<IQuote>> _books;
+        private readonly IDictionary<string, SortedQuotes> _books;
 
         public QuoteRepo()
-            : this(new Dictionary<Guid, IQuote>(), new Dictionary<string, SortedSet<IQuote>>())
+            : this(new Dictionary<Guid, IQuote>(), new Dictionary<string, SortedQuotes>())
         {
         }
 
-        public QuoteRepo(IDictionary<Guid, IQuote> quotes, IDictionary<string, SortedSet<IQuote>> books)
+        public QuoteRepo(IDictionary<Guid, IQuote> quotes, IDictionary<string, SortedQuotes> books)
         {
             _quotes = quotes;
             _books = books;
@@ -33,7 +31,17 @@
                 if (foundQuote.Symbol != quote.Symbol)
                 {
                     _books[foundQuote.Symbol].Remove(foundQuote);
-                    _books[quote.Symbol].Add(foundQuote);
+
+                    if (_books.TryGetValue(quote.Symbol, out var quotes))
+                    {                        
+                        quotes.Add(foundQuote);
+                    }
+                    else
+                    {
+                        _books.Add(quote.Symbol, new SortedQuotes() { foundQuote });
+                    }
+
+                    _books[foundQuote.Symbol].Remove(foundQuote);
                     foundQuote.Symbol = quote.Symbol;
                 }
             }
@@ -41,13 +49,13 @@
             {
                 _quotes.Add(quote.Id, quote);
 
-                if (_books.TryGetValue(quote.Symbol, out SortedSet<IQuote> list))
+                if (_books.TryGetValue(quote.Symbol, out SortedQuotes list))
                 {
                     list.Add(quote);
                 }
                 else
                 {
-                    _books.Add(quote.Symbol, new SortedSet<IQuote>(_quoteSorter) { quote });
+                    _books.Add(quote.Symbol, new SortedQuotes() { quote });
                 }
             }
         }
